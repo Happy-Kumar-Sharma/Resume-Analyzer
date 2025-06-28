@@ -1,0 +1,23 @@
+# Remove Tailwind from Project
+
+1. Delete the following files if they exist:
+   - tailwind.config.js
+   - postcss.config.cjs (if it only contains Tailwind config)
+
+2. Remove all Tailwind-related dependencies from package.json and package-lock.json:
+   - tailwindcss
+   - @tailwindcss/postcss
+   - @tailwindcss/oxide
+   - @tailwindcss/node
+
+3. Run the following commands in your frontend directory:
+   npm uninstall tailwindcss @tailwindcss/postcss @tailwindcss/oxide @tailwindcss/node
+   npm install
+
+4. Delete any Tailwind classes from your React components and CSS files (already done).
+
+5. If you see any errors about missing Tailwind, clear node_modules and reinstall:
+   rm -rf node_modules
+   npm install
+
+6. Done! Tailwind is fully removed from your project.

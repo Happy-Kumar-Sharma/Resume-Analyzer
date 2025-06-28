@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+PyPDF2
+python-docx
+spacy
+scikit-learn
+sentence-transformers
+mysql-connector-python
+pydantic
+requests

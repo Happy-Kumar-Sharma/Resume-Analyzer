@@ -1,0 +1,20 @@
+[
+  {
+    "job_title": "NLP Engineer",
+    "company": "ABC Corp",
+    "skills": ["Python", "NLP", "Machine Learning", "Docker"],
+    "link": "https://example.com/job1"
+  },
+  {
+    "job_title": "Data Scientist",
+    "company": "XYZ Inc",
+    "skills": ["Python", "SQL", "Deep Learning", "AWS"],
+    "link": "https://example.com/job2"
+  },
+  {
+    "job_title": "Frontend Developer",
+    "company": "Web Solutions",
+    "skills": ["React", "JavaScript", "CSS", "Docker"],
+    "link": "https://example.com/job3"
+  }
+]
