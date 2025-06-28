@@ -32,8 +32,8 @@ async def enhance_resume(data: EnhanceRequest):
     """
     Uses Cohere API to suggest improvements or auto-generate resume sections.
     """
-    # cohere_api_key = os.getenv("COHERE_API_KEY", "h92wObLZuihraIeZB1oC8gj828WzlFq1QK6NrfyS")
-    cohere_api_key = os.getenv("COHERE_API_KEY", "h92wObLZuihrS")
+    # cohere_api_key = os.getenv("COHERE_API_KEY", "test_key")  # Replace with your actual key
+    cohere_api_key = os.getenv("COHERE_API_KEY", "fake123Key")
     if not cohere_api_key:
         return {"error": "Cohere API key not set in environment variable COHERE_API_KEY."}
 
