@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ResumeHistory from './components/ResumeHistory';
 import { Link } from 'react-router-dom';
 
@@ -31,26 +31,55 @@ const linkStyle: React.CSSProperties = {
 };
 
 const History: React.FC = () => {
+  const [navOpen, setNavOpen] = useState(false);
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <aside style={sidebarStyle}>
-        <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px' }}>AI Resume Analyzer</h2>
-        <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
-        <Link to="/analyze" style={linkStyle}>Analyze</Link>
-        <Link to="/history" style={linkStyle}>History</Link>
-        <Link to="/settings" style={linkStyle}>Settings</Link>
-        <Link to="/blog" style={linkStyle}>Blog</Link>
-        <Link to="/faq" style={linkStyle}>FAQ</Link>
-        <Link to="/pricing" style={linkStyle}>Pricing</Link>
-      </aside>
-      <main style={{ marginLeft: 220, flex: 1, padding: '48px 32px' }}>
-        <h1 style={{ fontSize: 32, fontWeight: 800, color: '#7f5af0', marginBottom: 24 }}>Resume Analysis History</h1>
-        <p style={{ fontSize: 18, color: '#444', maxWidth: 700 }}>
-          Here you can view all your previously analyzed resumes and their details.
-        </p>
-        <ResumeHistory />
-      </main>
-    </div>
+    <>
+      <nav className="dashboard-mobile-nav">
+        <button
+          className="dashboard-mobile-nav__toggle"
+          aria-label="Open navigation menu"
+          onClick={() => setNavOpen((open) => !open)}
+        >
+          <span className="dashboard-mobile-nav__icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+        {navOpen && (
+          <div className="dashboard-mobile-nav__links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/analyze">Analyze</a>
+            <a href="/history">History</a>
+            <a href="/settings">Settings</a>
+            <a href="/blog">Blog</a>
+            <a href="/faq">FAQ</a>
+            <a href="/pricing">Pricing</a>
+          </div>
+        )}
+      </nav>
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <aside style={sidebarStyle} className="dashboard-sidebar">
+          <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px' }}>AI Resume Analyzer</h2>
+          <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
+          <Link to="/analyze" style={linkStyle}>Analyze</Link>
+          <Link to="/history" style={linkStyle}>History</Link>
+          <Link to="/settings" style={linkStyle}>Settings</Link>
+          <Link to="/blog" style={linkStyle}>Blog</Link>
+          <Link to="/faq" style={linkStyle}>FAQ</Link>
+          <Link to="/pricing" style={linkStyle}>Pricing</Link>
+        </aside>
+        <main style={{ marginLeft: 220, flex: 1, padding: '48px 32px' }} className="dashboard-main">
+          <h1 style={{ fontSize: 32, fontWeight: 800, color: '#7f5af0', marginBottom: 24 }}>Resume Analysis History</h1>
+          <p style={{ fontSize: 18, color: '#444', maxWidth: 700 }}>
+            Here you can view all your previously analyzed resumes and their details.
+          </p>
+          <ResumeHistory />
+        </main>
+      </div>
+    </>
   );
 };
 

@@ -16,7 +16,7 @@ const HeaderNav = () => (
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '20px 40px',
+    padding: '20px 0px',
     background: 'linear-gradient(120deg, #7f5af0 0%, #2cb67d 100%)',
     position: 'sticky',
     top: 0,
@@ -36,11 +36,11 @@ const HeaderNav = () => (
 );
 
 const Hero = () => (
-  <section className="hero" style={{ width: '100%', padding: '48px 0 0 0', background: 'linear-gradient(120deg, #7f5af0 0%, #2cb67d 100%)', minHeight: 220, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-    <div style={{ marginBottom: 24 }}>
-      <svg width="72" height="72" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff" opacity="0.10"/><path fill="#fff" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 15h-2v-2h2v2Zm0-4h-2V7h2v6Z"/></svg>
+  <section className="hero" style={{ width: '100%', padding: '48px 0 0 0', background: 'linear-gradient(120deg, #7f5af0 0%, #2cb67d 100%)', minHeight: 260, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+    <div style={{ marginBottom: 18 }}>
+      <img src="/resume-analyzer.png" alt="Resume Analyzer Logo" style={{ width: 80, height: 80, borderRadius: 18, boxShadow: '0 4px 24px #7f5af033', marginBottom: 10 }} />
     </div>
-    <h1 className="hero-title" style={{ color: '#fff', fontSize: 40, fontWeight: 800, marginBottom: 12 }}>AI-Powered Resume Analyzer</h1>
+    <h1 className="hero-title" style={{ color: '#fff', fontSize: 40, fontWeight: 800, marginBottom: 12, textAlign: 'center', letterSpacing: '-1px' }}>AI-Powered Resume Analyzer</h1>
     <p className="hero-subtitle" style={{ color: '#fff', fontSize: 20, fontWeight: 500, marginBottom: 28, maxWidth: 600, textAlign: 'center' }}>
       Get instant, AI-driven resume analysis, actionable suggestions, and job matches. Elevate your career with a world-class resume.
     </p>
@@ -95,7 +95,7 @@ const App: React.FC = () => {
 
         {/* Step 1: Upload Resume */}
         {step === 1 && (
-          <div style={{ background: '#f0f4ff', borderRadius: 24, padding: 32, boxShadow: '0 2px 12px rgba(127,90,240,0.07)', width: '100%', minHeight: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'fadeInUp 0.7s' }}>
+          <div style={{ background: '#f0f4ff', borderRadius: 24, padding: 0, boxShadow: '0 2px 12px rgba(127,90,240,0.07)', width: '100%', minHeight: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'fadeInUp 0.7s' }}>
             <h2 style={{ fontSize: 22, fontWeight: 700, color: '#7f5af0', marginBottom: 16 }}>Step 1: Upload Resume (PDF/DOCX)</h2>
             <ResumeUpload onParsed={handleResumeParsed} />
             <button className="cta-btn" style={{ marginTop: 16 }} onClick={() => setStep(2)} disabled={!resumeData}>Next</button>

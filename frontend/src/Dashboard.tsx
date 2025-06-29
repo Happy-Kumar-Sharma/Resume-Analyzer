@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import DashboardAnalytics from './components/DashboardAnalytics';
@@ -7,7 +6,6 @@ import ResumeScoreChart from './components/ResumeScoreChart';
 import SkillPieChart from './components/SkillPieChart';
 import SkillBarChart from './components/SkillBarChart';
 import SkillRadarChart from './components/SkillRadarChart';
-import { useEffect, useState } from 'react';
 import { fetchAnalytics } from './api/resumeApi';
 
 const sidebarStyle: React.CSSProperties = {
@@ -41,6 +39,7 @@ const linkStyle: React.CSSProperties = {
 const Dashboard: React.FC = () => {
   const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     fetchAnalytics().then(data => {
@@ -51,7 +50,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <aside style={sidebarStyle}>
+      <aside style={sidebarStyle} className="dashboard-sidebar">
         <Link to="/" style={{ textDecoration: 'none' }}>
           <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px', color: '#fff', cursor: 'pointer' }}>AI Resume Analyzer</h2>
         </Link>
@@ -63,7 +62,7 @@ const Dashboard: React.FC = () => {
         <Link to="/faq" style={linkStyle}>FAQ</Link>
         <Link to="/pricing" style={linkStyle}>Pricing</Link>
       </aside>
-      <main style={{ marginLeft: 220, flex: 1, padding: '48px 32px' }}>
+      <main style={{ marginLeft: 220, flex: 1, padding: '48px 32px' }} className="dashboard-main">
         <h1 style={{ fontSize: 32, fontWeight: 800, color: '#7f5af0', marginBottom: 24 }}>Welcome to your Dashboard</h1>
         <p style={{ fontSize: 18, color: '#444', maxWidth: 700 }}>
           Here you can view your resume analysis history, see personalized job recommendations, and track your progress. More features coming soon!
@@ -75,6 +74,32 @@ const Dashboard: React.FC = () => {
         <SkillBarChart analytics={analytics} loading={loading} />
         <SkillRadarChart analytics={analytics} loading={loading} />
       </main>
+      {/* Collapsible top-left nav bar for mobile */}
+      <nav className="dashboard-mobile-nav">
+        <button
+          className="dashboard-mobile-nav__toggle"
+          aria-label="Open navigation menu"
+          onClick={() => setNavOpen((open) => !open)}
+        >
+          <span className="dashboard-mobile-nav__icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+        {navOpen && (
+          <div className="dashboard-mobile-nav__links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/analyze">Analyze</a>
+            <a href="/history">History</a>
+            <a href="/settings">Settings</a>
+            <a href="/blog">Blog</a>
+            <a href="/faq">FAQ</a>
+            <a href="/pricing">Pricing</a>
+          </div>
+        )}
+      </nav>
     </div>
   );
 };

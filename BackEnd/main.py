@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import os
+from config import settings
 
 import requests
 from resume_parser import extract_text
@@ -33,7 +34,7 @@ async def enhance_resume(data: EnhanceRequest):
     Uses Cohere API to suggest improvements or auto-generate resume sections.
     """
     # cohere_api_key = os.getenv("COHERE_API_KEY", "test_key")  # Replace with your actual key
-    cohere_api_key = os.getenv("COHERE_API_KEY", "fake123Key")
+    cohere_api_key = settings.COHERE_API_KEY
     if not cohere_api_key:
         return {"error": "Cohere API key not set in environment variable COHERE_API_KEY."}
 
@@ -81,9 +82,9 @@ async def enhance_resume(data: EnhanceRequest):
         return {"error": str(e)}
 
 # Ensure tables are created on startup
-@app.on_event("startup")
-def on_startup():
-    create_tables()
+# @app.on_event("startup")
+# def on_startup():
+#     create_tables()
 
 # CORS for frontend
 app.add_middleware(
