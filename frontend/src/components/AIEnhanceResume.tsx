@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 interface Props {
   resumeData: any;
 }
-
-const API_BASE = 'http://localhost:8000';
 
 const AIEnhanceResume: React.FC<Props> = ({ resumeData }) => {
   const [aiResult, setAiResult] = useState<string | null>(null);
@@ -17,16 +14,17 @@ const AIEnhanceResume: React.FC<Props> = ({ resumeData }) => {
     setError(null);
     setAiResult(null);
     try {
-      const res = await axios.post(`${API_BASE}/enhance_resume`, {
-        summary: resumeData.summary || '',
-        skills: resumeData.skills || [],
-        experience: resumeData.experience || [],
-        education: resumeData.education || [],
-        action: 'improve',
-      });
-      setAiResult(res.data.result);
+      if (!(window as any).puter || !(window as any).puter.ai) {
+        setError('AI bot is not loaded. Please check your internet connection and reload the page.');
+        setLoading(false);
+        return;
+      }
+      const prompt = `You are an expert resume coach. Analyze the following resume sections and provide actionable, specific suggestions to improve the summary, skills, experience, and education. Return your suggestions as a clear, readable list.\n\nResume Data: ${JSON.stringify(resumeData)}`;
+      const result = await (window as any).puter.ai.chat(prompt, { model: 'gpt-4o' });
+      let aiContent = result?.result?.message?.content || result?.message?.content || result;
+      setAiResult(typeof aiContent === 'string' ? aiContent : JSON.stringify(aiContent));
     } catch (e: any) {
-      setError(e?.response?.data?.error || e.message || 'AI enhancement failed.');
+      setError(e?.message || 'AI enhancement failed.');
     } finally {
       setLoading(false);
     }

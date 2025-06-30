@@ -22,7 +22,7 @@ const ResumeAIAnalysis: React.FC<ResumeAIAnalysisProps> = ({ initialResume, onAn
     try {
       // Use Puter.js directly in the browser for AI analysis
       if (!(window as any).puter || !(window as any).puter.ai) {
-        setError('Puter.js is not loaded. Please check your internet connection and reload the page.');
+        setError('AI bot is not loaded. Please check your internet connection and reload the page.');
         setLoading(false);
         return;
       }
@@ -73,29 +73,67 @@ const ResumeAIAnalysis: React.FC<ResumeAIAnalysisProps> = ({ initialResume, onAn
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: '0 auto', padding: 0 }}>
+    <div style={{ maxWidth: '100%', margin: '0 auto', padding: 0 }}>
       {!hideHeading && <h2>AI Resume & JD Analysis</h2>}
-      <textarea
-        placeholder="Paste resume JSON here (from extraction step)"
-        value={resume ? JSON.stringify(resume, null, 2) : ''}
-        onChange={e => {
-          try {
-            setResume(JSON.parse(e.target.value));
-          } catch {
-            setResume(null);
-          }
-        }}
-        rows={8}
-        style={{ width: '100%', marginBottom: 12 }}
-        disabled={!!initialResume}
-      />
-      <textarea
-        placeholder="Paste job description here"
-        value={jd}
-        onChange={e => setJD(e.target.value)}
-        rows={6}
-        style={{ width: '100%', marginBottom: 12 }}
-      />
+      <label style={{ display: 'block', width: '100%', marginBottom: 12, maxWidth: '100%' }}>
+        <span style={{ display: 'block', fontWeight: 600, marginBottom: 6, color: '#7f5af0' }}>Resume JSON (from extraction step)</span>
+        <textarea
+          placeholder="Paste resume JSON here..."
+          value={resume ? JSON.stringify(resume, null, 2) : ''}
+          onChange={e => {
+            try {
+              setResume(JSON.parse(e.target.value));
+            } catch {
+              setResume(null);
+            }
+          }}
+          rows={8}
+          style={{
+            width: '100vw',
+            maxWidth: '100%',
+            minWidth: '100%',
+            borderRadius: 12,
+            border: '1.5px solid #d1c4e9',
+            background: '#f3e8ff',
+            padding: 14,
+            fontSize: 15,
+            color: '#333',
+            fontFamily: 'Fira Mono, monospace',
+            marginBottom: 0,
+            boxShadow: '0 2px 8px rgba(127,90,240,0.04)',
+            transition: 'border 0.2s',
+            outline: 'none',
+            resize: 'vertical',
+          }}
+          disabled={!!initialResume}
+        />
+      </label>
+      <label style={{ display: 'block', width: '100%', marginBottom: 12, maxWidth: '100%' }}>
+        <span style={{ display: 'block', fontWeight: 600, marginBottom: 6, color: '#2cb67d' }}>Job Description</span>
+        <textarea
+          placeholder="Paste job description here..."
+          value={jd}
+          onChange={e => setJD(e.target.value)}
+          rows={6}
+          style={{
+            width: '100vw',
+            maxWidth: '100%',
+            minWidth: '100%',
+            borderRadius: 12,
+            border: '1.5px solid #b2f2dd',
+            background: '#e6fff7',
+            padding: 14,
+            fontSize: 15,
+            color: '#333',
+            fontFamily: 'inherit',
+            marginBottom: 0,
+            boxShadow: '0 2px 8px rgba(44,182,125,0.04)',
+            transition: 'border 0.2s',
+            outline: 'none',
+            resize: 'vertical',
+          }}
+        />
+      </label>
       <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
         {/* Back button for step 2, only show if hideHeading is true (i.e., in step 2) */}
         {hideHeading && (

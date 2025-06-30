@@ -28,7 +28,7 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
       }
       // 2. Use Puter.js to analyze the extracted text
       if (!(window as any).puter || !(window as any).puter.ai) {
-        setError('Puter.js is not loaded. Please check your internet connection and reload the page.');
+        setError('AI bot is not loaded. Please check your internet connection and reload the page.');
         setLoading(false);
         return;
       }
