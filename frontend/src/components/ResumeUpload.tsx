@@ -5,6 +5,7 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resumeData, setResumeData] = useState<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -31,7 +32,7 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
         setLoading(false);
         return;
       }
-      const prompt = `Extract the following fields from this resume text and return as a JSON object with these keys: name, email, phone, skills (array), education (array), experience (array). Resume: ${text}`;
+      const prompt = `Extract the following fields from this resume text and return as a JSON object with these keys: name, email, phone, skills (array), education (array of strings), experience (array of strings). For education and experience, return each entry as a single readable string. Resume: ${text}`;
       const result = await (window as any).puter.ai.chat(prompt, { model: 'gpt-4o' });
       let parsed;
       let aiContent = result?.result?.message?.content || result?.message?.content || result;
@@ -55,11 +56,19 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
       // Save structured data to backend
       const savePayload = {
         name: parsed.name || '',
-        email: Array.isArray(parsed.email) ? parsed.email[0] : (parsed.email || ''),
+        email: Array.isArray(parsed.all_emails) ? parsed.all_emails[0] : (parsed.email || ''),
         phone: parsed.phone || '',
         skills: parsed.skills || [],
-        education: parsed.education || [],
-        experience: parsed.experience || [],
+        education: Array.isArray(parsed.education)
+          ? parsed.education.map((edu: any) =>
+              typeof edu === 'string' ? edu : JSON.stringify(edu)
+            )
+          : [],
+        experience: Array.isArray(parsed.experience)
+          ? parsed.experience.map((exp: any) =>
+              typeof exp === 'string' ? exp : JSON.stringify(exp)
+            )
+          : [],
         filename: file.name
       };
       try {
@@ -69,6 +78,7 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
         console.error('Failed to save resume data:', e);
       }
       onParsed(parsed);
+      setResumeData(parsed);
     } catch (err) {
       setError('Failed to parse resume. See console for details.');
       console.error('Resume upload error:', err);
@@ -101,6 +111,22 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
         ) : 'Upload Resume'}
       </button>
       {error && <div style={{ color: '#b91c1c', fontSize: 14, marginTop: 4 }}>{error}</div>}
+      {resumeData && (
+        <div style={{ width: '100%', marginTop: 24 }}>
+          <div style={{ fontWeight: 600, marginBottom: 4, color: '#6b21a8' }}>Education:</div>
+          <ul style={{ marginBottom: 16 }}>
+            {Array.isArray(resumeData.education) && resumeData.education.map((edu: string, idx: number) => (
+              <li key={idx}>{edu}</li>
+            ))}
+          </ul>
+          <div style={{ fontWeight: 600, marginBottom: 4, color: '#6b21a8' }}>Experience:</div>
+          <ul>
+            {Array.isArray(resumeData.experience) && resumeData.experience.map((exp: string, idx: number) => (
+              <li key={idx}>{exp}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

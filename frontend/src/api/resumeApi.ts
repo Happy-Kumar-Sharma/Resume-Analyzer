@@ -54,3 +54,9 @@ export const fetchAnalytics = async (email?: string) => {
   const res = await axios.get(`${API_BASE}/analytics`, { params });
   return res.data;
 };
+
+// Unified AI-powered analysis
+export const analyzeResumeAndJD = async (resume: any, jd: string) => {
+  const res = await axios.post(`${API_BASE}/analyze_resume_and_jd`, { resume, jd });
+  return res.data;
+};

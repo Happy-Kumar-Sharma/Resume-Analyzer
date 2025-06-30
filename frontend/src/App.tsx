@@ -1,9 +1,8 @@
-
-
 import React, { useState } from 'react';
 import ResumeUpload from './components/ResumeUpload';
 import ResumeDetails from './components/ResumeDetails';
 import AIEnhanceResume from './components/AIEnhanceResume';
+import ResumeAIAnalysis from './components/ResumeAIAnalysis';
 import { matchJD, getSuggestions, recommendJobs } from './api/resumeApi';
 import { Link } from 'react-router-dom';
 
@@ -108,67 +107,62 @@ const App: React.FC = () => {
             <h2 style={{ fontSize: 22, fontWeight: 700, color: '#2cb67d', marginBottom: 16 }}>Step 2: Resume Details & Paste Job Description</h2>
             <ResumeDetails data={resumeData} />
             <AIEnhanceResume resumeData={resumeData} />
-            <textarea
-              rows={6}
-              style={{ width: '100%', padding: 16, border: '2px solid #e0d7f7', borderRadius: 16, fontSize: 16, background: '#f5f6fa', color: '#232046', marginBottom: 12, resize: 'vertical', fontFamily: 'inherit' }}
-              value={jd}
-              onChange={e => setJd(e.target.value)}
-              placeholder="Paste job description here..."
-            />
-            <div style={{ display: 'flex', gap: 16, marginTop: 8 }}>
-              <button className="cta-btn" style={{ background: '#e0e0e0', color: '#232046' }} onClick={() => setStep(1)}>Back</button>
-              <button className="cta-btn" onClick={handleAnalyze} disabled={!jd}>Analyze Resume</button>
+            {/* Unified AI Resume & JD Analysis */}
+            <div style={{ width: '100%', marginTop: 24 }}>
+              <ResumeAIAnalysis
+                initialResume={resumeData}
+                onAnalysisComplete={(result) => {
+                  setMatchResult(result);
+                  setStep(3);
+                }}
+                hideHeading
+                onBack={() => setStep(1)}
+              />
             </div>
+            {/* <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
+              <button className="cta-btn" style={{ background: '#e0d7f7', color: '#232046' }} onClick={() => setStep(1)}>Back</button>
+            </div> */}
           </div>
         )}
 
         {/* Step 3: Results */}
-        {step === 3 && (
+        {step === 3 && matchResult && (
           <div style={{ background: '#fffbe6', borderRadius: 24, padding: 32, boxShadow: '0 2px 12px rgba(255,215,64,0.07)', width: '100%', minHeight: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'fadeInUp 0.7s' }}>
             <h2 style={{ fontSize: 22, fontWeight: 700, color: '#f5a524', marginBottom: 16 }}>Step 3: Results & Recommendations</h2>
-            {matchResult && (
-              <div style={{ marginTop: 8, background: '#f0f4ff', borderRadius: 16, padding: 20, width: '100%' }}>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#2cb67d', marginBottom: 8 }}>Match Result</h3>
-                <p><span style={{ fontWeight: 600 }}>Similarity Score:</span> {matchResult.similarity_score}</p>
-                <p><span style={{ fontWeight: 600 }}>Matched Keywords:</span> {matchResult.matched_keywords.join(', ')}</p>
-                <p><span style={{ fontWeight: 600 }}>Missing Skills:</span> {matchResult.missing_skills.join(', ')}</p>
-              </div>
-            )}
-            {suggestions && (
-              <div style={{ marginTop: 24, background: '#f6fff7', borderRadius: 16, padding: 20, width: '100%' }}>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#7f5af0', marginBottom: 8 }}>Suggestions</h3>
-                <ul style={{ paddingLeft: 24, marginBottom: 12 }}>
-                  {suggestions.suggestions.map((s: string, i: number) => (
-                    <li key={i}>{s}</li>
-                  ))}
-                </ul>
-                <h4 style={{ fontWeight: 600, marginTop: 12 }}>Recommended Courses</h4>
-                <ul style={{ paddingLeft: 24 }}>
-                  {suggestions.courses.map((c: string, i: number) => (
-                    <li key={i}><a href={c} style={{ color: '#2cb67d', textDecoration: 'underline' }} target="_blank" rel="noopener noreferrer">{c}</a></li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {jobs.length > 0 && (
-              <div style={{ marginTop: 24, background: '#fff', borderRadius: 16, padding: 20, width: '100%' }}>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#f5a524', marginBottom: 8 }}>Job Recommendations</h3>
-                <ul style={{ paddingLeft: 24 }}>
-                  {jobs.map((job, i) => (
-                    <li key={i} style={{ marginBottom: 12 }}>
-                      <strong>{job.job_title}</strong> at {job.company} (Score: {job.match_score})<br />
-                      <a href={job.link} target="_blank" rel="noopener noreferrer" style={{ color: '#7f5af0', textDecoration: 'underline' }}>View Job</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <div style={{ marginTop: 8, background: '#f0f4ff', borderRadius: 16, padding: 20, width: '100%' }}>
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: '#2cb67d', marginBottom: 8 }}>AI Analysis Result</h3>
+              <p><span style={{ fontWeight: 600 }}>Similarity Score:</span> {matchResult.similarity_score}</p>
+              <p><span style={{ fontWeight: 600 }}>Matched Keywords:</span> {matchResult.matched_keywords?.join(', ')}</p>
+              <p><span style={{ fontWeight: 600 }}>Missing Skills:</span> {matchResult.missing_skills?.join(', ')}</p>
+              <h4 style={{ fontWeight: 600, marginTop: 12 }}>Suggestions</h4>
+              <ul style={{ paddingLeft: 24, marginBottom: 12 }}>
+                {matchResult.suggestions?.map((s: string, i: number) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+              <h4 style={{ fontWeight: 600, marginTop: 12 }}>Recommended Courses</h4>
+              <ul style={{ paddingLeft: 24 }}>
+                {matchResult.courses?.map((c: string, i: number) => (
+                  <li key={i}>{c}</li>
+                ))}
+              </ul>
+              <h4 style={{ fontWeight: 600, marginTop: 12 }}>Job Recommendations</h4>
+              <ul style={{ paddingLeft: 24 }}>
+                {matchResult.recommendations?.map((job: any, i: number) => (
+                  <li key={i} style={{ marginBottom: 12 }}>
+                    <strong>{job.job_title}</strong> at {job.company} (Score: {job.match_score}){' '}
+                    {job.link && <a href={job.link} target="_blank" rel="noopener noreferrer" style={{ color: '#7f5af0', textDecoration: 'underline' }}>[Link]</a>}
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
               <button className="cta-btn" style={{ background: '#e0d7f7', color: '#232046' }} onClick={() => setStep(2)}>Back</button>
               <button className="cta-btn" onClick={() => setStep(1)}>Start Over</button>
             </div>
           </div>
         )}
+
 
         <style>{`
           @keyframes fadeInUp {

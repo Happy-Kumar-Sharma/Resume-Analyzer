@@ -1,4 +1,4 @@
-
+import logging
 from fastapi import FastAPI, UploadFile, File, Body, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -177,36 +177,6 @@ async def save_resume_data(data: ResumeData):
     conn.close()
     return {"success": True}
 
-@app.post("/match_jd", response_model=JDMatchResult)
-async def match_jd(data: dict = Body(...)):
-    resume = ResumeParseResult(**data["resume"])
-    jd = data["jd"]
-    jd_lower = jd.lower()
-    matched_keywords = [s for s in resume.skills if s.lower() in jd_lower]
-    missing_skills = [s for s in jd.split() if s.lower() not in [sk.lower() for sk in resume.skills]]
-    similarity_score = len(matched_keywords) / max(len(jd.split()), 1)
-    return JDMatchResult(
-        similarity_score=round(similarity_score, 2),
-        matched_keywords=matched_keywords,
-        missing_skills=missing_skills[:5]
-    )
-
-@app.post("/suggestions", response_model=SuggestionResult)
-async def suggestions(data: dict = Body(...)):
-    resume = ResumeParseResult(**data["resume"])
-    jd = data["jd"]
-    jd_lower = jd.lower()
-    missing_skills = [s for s in jd.split() if s.lower() not in [sk.lower() for sk in resume.skills]]
-    suggestions = [f"Add {s} to your resume" for s in missing_skills[:5]]
-    courses = get_learning_path(missing_skills)
-    return SuggestionResult(suggestions=suggestions, courses=courses)
-
-@app.post("/recommend_jobs", response_model=List[JobRecommendation])
-async def recommend_jobs(resume: ResumeParseResult):
-    jobs = load_jobs()
-    matched = find_matching_jobs(resume.skills, jobs)
-    return [JobRecommendation(**job) for job in matched[:5]]
-
 @app.get("/")
 def root():
     return {"message": "AI-Powered Resume Analyzer Backend"}
@@ -246,13 +216,14 @@ def get_analytics(email: str = None):
     skill_map = {}
     for row in cursor.fetchall():
         skills = row["skills"]
+        logging.info(f"Processing skills: {skills}")
         if skills:
             for skill in skills.split(","):
                 s = skill.strip().lower()
                 if s:
                     skill_map[s] = skill_map.get(s, 0) + 1
-    # Top 10 skills
-    top_skills = sorted(skill_map.items(), key=lambda x: x[1], reverse=True)[:10]
+    # Top 15 skills
+    top_skills = sorted(skill_map.items(), key=lambda x: x[1], reverse=True)[:15]
     cursor.close()
     conn.close()
     return JSONResponse({
