@@ -1,3 +1,8 @@
+// Save structured resume data to backend
+export const saveResumeData = async (data: any) => {
+  const res = await axios.post(`${API_BASE}/save_resume_data`, data);
+  return res.data;
+};
 import axios from 'axios';
 
 const API_BASE = 'http://localhost:8000'; // Change to your Render backend URL after deployment

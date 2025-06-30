@@ -8,7 +8,6 @@ from config import settings
 
 import requests
 from resume_parser import extract_text
-from nlp_utils import extract_entities
 from job_recommender import load_jobs, find_matching_jobs
 import os
 from db import get_db_connection, create_tables
@@ -132,43 +131,51 @@ def get_learning_path(missing_skills: List[str]) -> List[str]:
     return [course_map[s.lower()] for s in missing_skills if s.lower() in course_map]
 
 
-# Save resume to DB after parsing
-@app.post("/parse_resume", response_model=ResumeParseResult)
+# Extract plain text from resume file (no entity extraction)
+@app.post("/parse_resume")
 async def parse_resume(file: UploadFile = File(...)):
     contents = await file.read()
     with open(f"temp_{file.filename}", "wb") as f:
         f.write(contents)
     text = extract_text(f"temp_{file.filename}", file.filename)
-    if text is None:
-        os.remove(f"temp_{file.filename}")
-        return ResumeParseResult(name=None, email=None, phone=None, skills=[], education=[], experience=[])
-    entities = extract_entities(text)
     os.remove(f"temp_{file.filename}")
+    if text is None:
+        return {"text": None}
+    return {"text": text}
 
-    # Save to DB
+# New endpoint: Save structured resume data (from frontend AI)
+class ResumeData(BaseModel):
+    name: Optional[str]
+    email: Optional[str]
+    phone: Optional[str]
+    skills: List[str] = []
+    education: List[str] = []
+    experience: List[str] = []
+    filename: Optional[str] = None
+
+@app.post("/save_resume_data")
+async def save_resume_data(data: ResumeData):
     conn = get_db_connection()
     cursor = conn.cursor()
-    # Optionally, calculate a score (for now, random for demo)
     import random
     score = round(random.uniform(0.7, 0.95), 2)
     cursor.execute('''
         INSERT INTO resumes (name, email, phone, skills, education, experience, score, filename)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     ''', (
-        entities.get('name'),
-        entities.get('email'),
-        entities.get('phone'),
-        ', '.join(entities.get('skills', [])),
-        ', '.join(entities.get('education', [])),
-        ', '.join(entities.get('experience', [])),
+        data.name,
+        data.email,
+        data.phone,
+        ', '.join(data.skills or []),
+        ', '.join(data.education or []),
+        ', '.join(data.experience or []),
         score,
-        file.filename
+        data.filename
     ))
     conn.commit()
     cursor.close()
     conn.close()
-
-    return ResumeParseResult(**entities)
+    return {"success": True}
 
 @app.post("/match_jd", response_model=JDMatchResult)
 async def match_jd(data: dict = Body(...)):

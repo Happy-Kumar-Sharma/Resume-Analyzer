@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadResume } from '../api/resumeApi';
+import { uploadResume, saveResumeData } from '../api/resumeApi';
 
 const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed }) => {
   const [file, setFile] = useState<File | null>(null);
@@ -17,10 +17,61 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
     setLoading(true);
     setError('');
     try {
-      const data = await uploadResume(file);
-      onParsed(data);
+      // 1. Upload file to backend and get extracted text
+      const res = await uploadResume(file);
+      const text = res.text;
+      if (!text || text.trim().length < 20) {
+        setError('Could not extract text from file.');
+        setLoading(false);
+        return;
+      }
+      // 2. Use Puter.js to analyze the extracted text
+      if (!(window as any).puter || !(window as any).puter.ai) {
+        setError('Puter.js is not loaded. Please check your internet connection and reload the page.');
+        setLoading(false);
+        return;
+      }
+      const prompt = `Extract the following fields from this resume text and return as a JSON object with these keys: name, email, phone, skills (array), education (array), experience (array). Resume: ${text}`;
+      const result = await (window as any).puter.ai.chat(prompt, { model: 'gpt-4o' });
+      let parsed;
+      let aiContent = result?.result?.message?.content || result?.message?.content || result;
+
+      if (typeof aiContent === 'string') {
+        // Remove code block markers if present
+        const jsonString = aiContent.replace(/```json|```/g, '').trim();
+        try {
+          parsed = JSON.parse(jsonString);
+        } catch (e) {
+          // Fallback: try to extract JSON from string
+          const match = jsonString.match(/\{[\s\S]*\}/);
+          if (match) parsed = JSON.parse(match[0]);
+          else throw new Error('Could not parse AI response.');
+        }
+      } else if (typeof aiContent === 'object') {
+        parsed = aiContent;
+      } else {
+        throw new Error('AI response is not a string or object.');
+      }
+      // Save structured data to backend
+      const savePayload = {
+        name: parsed.name || '',
+        email: Array.isArray(parsed.email) ? parsed.email[0] : (parsed.email || ''),
+        phone: parsed.phone || '',
+        skills: parsed.skills || [],
+        education: parsed.education || [],
+        experience: parsed.experience || [],
+        filename: file.name
+      };
+      try {
+        await saveResumeData(savePayload);
+      } catch (e) {
+        // Saving to backend failed, but still show parsed data
+        console.error('Failed to save resume data:', e);
+      }
+      onParsed(parsed);
     } catch (err) {
-      setError('Failed to parse resume.');
+      setError('Failed to parse resume. See console for details.');
+      console.error('Resume upload error:', err);
     } finally {
       setLoading(false);
     }
