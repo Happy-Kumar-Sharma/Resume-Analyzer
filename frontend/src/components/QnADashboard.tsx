@@ -82,7 +82,7 @@ const QnADashboard: React.FC = () => {
               <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px', color: '#fff', cursor: 'pointer' }}>AI Resume Analyzer</h2>
             </a>
             <a href="/dashboard" style={sidebarLinkStyle}>Dashboard</a>
-            <a href="/analyze" style={sidebarLinkStyle}>Analyze</a>
+            {/* <a href="/analyze" style={sidebarLinkStyle}>Analyze</a> */}
             <a href="/qna-dashboard" style={sidebarLinkStyle}>Q&A Dashboard</a>
             <a href="/history" style={sidebarLinkStyle}>History</a>
             <a href="/settings" style={sidebarLinkStyle}>Settings</a>
@@ -147,7 +147,7 @@ const QnADashboard: React.FC = () => {
             <div className="dashboard-mobile-nav__links">
               <a href="/">Home</a>
               <a href="/dashboard">Dashboard</a>
-              <a href="/analyze">Analyze</a>
+              {/* <a href="/analyze">Analyze</a> */}
               <a href="/qna-dashboard">Q&A Dashboard</a>
               <a href="/history">History</a>
               <a href="/settings">Settings</a>
@@ -183,7 +183,7 @@ const QnADashboard: React.FC = () => {
           <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px', color: '#fff', cursor: 'pointer' }}>AI Resume Analyzer</h2>
         </a>
         <a href="/dashboard" style={sidebarLinkStyle}>Dashboard</a>
-        <a href="/analyze" style={sidebarLinkStyle}>Analyze</a>
+        {/* <a href="/analyze" style={sidebarLinkStyle}>Analyze</a> */}
         <a href="/qna-dashboard" style={sidebarLinkStyle}>Q&A Dashboard</a>
         <a href="/history" style={sidebarLinkStyle}>History</a>
         <a href="/settings" style={sidebarLinkStyle}>Settings</a>
@@ -228,7 +228,7 @@ const QnADashboard: React.FC = () => {
           <div className="dashboard-mobile-nav__links">
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
-            <a href="/analyze">Analyze</a>
+            {/* <a href="/analyze">Analyze</a> */}
             <a href="/qna-dashboard">Q&A Dashboard</a>
             <a href="/history">History</a>
             <a href="/settings">Settings</a>

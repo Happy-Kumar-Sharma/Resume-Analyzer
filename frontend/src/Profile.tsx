@@ -21,7 +21,7 @@ const Profile: React.FC = () => {
           <div className="dashboard-mobile-nav__links">
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
-            <a href="/analyze">Analyze</a>
+            {/* <a href="/analyze">Analyze</a> */}
             <a href="/history">History</a>
             <a href="/settings">Settings</a>
             <a href="/blog">Blog</a>
