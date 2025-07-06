@@ -50,6 +50,15 @@ def create_tables():
             FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
         )
     ''')
+    # QnA table for storing interview Q&A per email
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS qna (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255),
+            qna_json JSON,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     conn.commit()
     print("All tables created successfully.")
     cursor.close()

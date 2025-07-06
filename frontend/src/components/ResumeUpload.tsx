@@ -80,7 +80,7 @@ const ResumeUpload: React.FC<{ onParsed: (data: any) => void }> = ({ onParsed })
       onParsed(parsed);
       setResumeData(parsed);
     } catch (err) {
-      setError('Failed to parse resume. See console for details.');
+      setError('Your limited free AI Analyzer is exceeded. Please upgrade to continue using the service.');
       console.error('Resume upload error:', err);
     } finally {
       setLoading(false);

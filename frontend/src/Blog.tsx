@@ -55,6 +55,7 @@ const Blog: React.FC = () => {
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
             <a href="/analyze">Analyze</a>
+            <a href="/qna-dashboard">Q&A Dashboard</a>
             <a href="/history">History</a>
             <a href="/settings">Settings</a>
             <a href="/blog">Blog</a>
@@ -82,6 +83,7 @@ const Blog: React.FC = () => {
           <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px' }}>AI Resume Analyzer</h2>
           <Link to="/dashboard" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: 18, margin: '18px 0', padding: '8px 24px', borderRadius: 16, transition: 'background 0.2s, color 0.2s', display: 'block' }}>Dashboard</Link>
           <Link to="/analyze" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: 18, margin: '18px 0', padding: '8px 24px', borderRadius: 16, transition: 'background 0.2s, color 0.2s', display: 'block' }}>Analyze</Link>
+          <Link to="/qna-dashboard" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: 18, margin: '18px 0', padding: '8px 24px', borderRadius: 16, transition: 'background 0.2s, color 0.2s', display: 'block' }}>Q&A Dashboard</Link>
           <Link to="/history" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: 18, margin: '18px 0', padding: '8px 24px', borderRadius: 16, transition: 'background 0.2s, color 0.2s', display: 'block' }}>History</Link>
           <Link to="/settings" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: 18, margin: '18px 0', padding: '8px 24px', borderRadius: 16, transition: 'background 0.2s, color 0.2s', display: 'block' }}>Settings</Link>
           <Link to="/blog" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: 18, margin: '18px 0', padding: '8px 24px', borderRadius: 16, transition: 'background 0.2s, color 0.2s', display: 'block' }}>Blog</Link>

@@ -56,6 +56,7 @@ const Dashboard: React.FC = () => {
         </Link>
         <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
         <Link to="/analyze" style={linkStyle}>Analyze</Link>
+        <Link to="/qna-dashboard" style={linkStyle}>Q&A Dashboard</Link>
         <Link to="/history" style={linkStyle}>History</Link>
         <Link to="/settings" style={linkStyle}>Settings</Link>
         <Link to="/blog" style={linkStyle}>Blog</Link>
@@ -92,6 +93,7 @@ const Dashboard: React.FC = () => {
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
             <a href="/analyze">Analyze</a>
+            <a href="/qna-dashboard">Q&A Dashboard</a>
             <a href="/history">History</a>
             <a href="/settings">Settings</a>
             <a href="/blog">Blog</a>

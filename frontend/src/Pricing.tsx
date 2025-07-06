@@ -91,13 +91,14 @@ const Pricing: React.FC = () => {
 				{navOpen && (
 					<div className="dashboard-mobile-nav__links">
 						<a href="/">Home</a>
-						<a href="/dashboard">Dashboard</a>
-						<a href="/analyze">Analyze</a>
-						<a href="/history">History</a>
-						<a href="/settings">Settings</a>
-						<a href="/blog">Blog</a>
-						<a href="/faq">FAQ</a>
-						<a href="/pricing">Pricing</a>
+			<a href="/dashboard">Dashboard</a>
+			<a href="/analyze">Analyze</a>
+			<a href="/qna-dashboard">Q&A Dashboard</a>
+			<a href="/history">History</a>
+			<a href="/settings">Settings</a>
+			<a href="/blog">Blog</a>
+			<a href="/faq">FAQ</a>
+			<a href="/pricing">Pricing</a>
 					</div>
 				)}
 			</nav>
@@ -113,27 +114,30 @@ const Pricing: React.FC = () => {
 					>
 						AI Resume Analyzer
 					</h2>
-					<Link to="/dashboard" style={linkStyle}>
-						Dashboard
-					</Link>
-					<Link to="/analyze" style={linkStyle}>
-						Analyze
-					</Link>
-					<Link to="/history" style={linkStyle}>
-						History
-					</Link>
-					<Link to="/settings" style={linkStyle}>
-						Settings
-					</Link>
-					<Link to="/blog" style={linkStyle}>
-						Blog
-					</Link>
-					<Link to="/faq" style={linkStyle}>
-						FAQ
-					</Link>
-					<Link to="/pricing" style={linkStyle}>
-						Pricing
-					</Link>
+		  <Link to="/dashboard" style={linkStyle}>
+			Dashboard
+		  </Link>
+		  <Link to="/analyze" style={linkStyle}>
+			Analyze
+		  </Link>
+		  <Link to="/qna-dashboard" style={linkStyle}>
+			Q&A Dashboard
+		  </Link>
+		  <Link to="/history" style={linkStyle}>
+			History
+		  </Link>
+		  <Link to="/settings" style={linkStyle}>
+			Settings
+		  </Link>
+		  <Link to="/blog" style={linkStyle}>
+			Blog
+		  </Link>
+		  <Link to="/faq" style={linkStyle}>
+			FAQ
+		  </Link>
+		  <Link to="/pricing" style={linkStyle}>
+			Pricing
+		  </Link>
 				</aside>
 				<main style={{ marginLeft: 220, flex: 1, padding: '48px 32px' }} className="dashboard-main">
 					<h1

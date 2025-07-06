@@ -1,3 +1,15 @@
+// Save QnA to backend
+export const saveQnA = async (email: string, qna: any[]) => {
+  const res = await axios.post(`${API_BASE}/save_qna`, { email, qna });
+  return res.data;
+};
+
+// Fetch QnA history (all or by email)
+export const fetchQnAHistory = async (email?: string) => {
+  const params = email ? { email } : {};
+  const res = await axios.get(`${API_BASE}/qna_history`, { params });
+  return res.data;
+};
 // Save structured resume data to backend
 export const saveResumeData = async (data: any) => {
   const res = await axios.post(`${API_BASE}/save_resume_data`, data);

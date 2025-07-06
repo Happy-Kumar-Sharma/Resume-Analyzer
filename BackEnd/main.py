@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 import logging
 from fastapi import FastAPI, UploadFile, File, Body, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -230,3 +231,51 @@ def get_analytics(email: str = None):
         "resume_count": resume_count,
         "top_skills": top_skills
     })
+
+# QnA Model
+class QnAData(BaseModel):
+    email: str
+    qna: list
+
+# Save QnA
+@app.post("/save_qna")
+async def save_qna(data: QnAData):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    import json
+    try:
+        cursor.execute('''
+            INSERT INTO qna (email, qna_json)
+            VALUES (%s, %s)
+        ''', (data.email, json.dumps(data.qna)))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        cursor.close()
+        conn.close()
+        raise HTTPException(status_code=500, detail=str(e))
+    cursor.close()
+    conn.close()
+    return {"success": True}
+
+# Get QnA history (all or by email)
+@app.get("/qna_history")
+def get_qna_history(email: str = None):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    if email:
+        cursor.execute("SELECT id, email, qna_json, created_at FROM qna WHERE email=%s ORDER BY created_at DESC", (email,))
+    else:
+        cursor.execute("SELECT id, email, qna_json, created_at FROM qna ORDER BY created_at DESC")
+    rows = cursor.fetchall()
+    # Parse JSON for qna_json
+    import json
+    for row in rows:
+        if 'qna_json' in row and isinstance(row['qna_json'], str):
+            try:
+                row['qna_json'] = json.loads(row['qna_json'])
+            except:
+                row['qna_json'] = []
+    cursor.close()
+    conn.close()
+    return rows

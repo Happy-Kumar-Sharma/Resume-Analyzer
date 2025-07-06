@@ -52,6 +52,7 @@ const History: React.FC = () => {
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
             <a href="/analyze">Analyze</a>
+            <a href="/qna-dashboard">Q&A Dashboard</a>
             <a href="/history">History</a>
             <a href="/settings">Settings</a>
             <a href="/blog">Blog</a>
@@ -65,6 +66,7 @@ const History: React.FC = () => {
           <h2 style={{ fontWeight: 800, fontSize: 28, marginBottom: 32, letterSpacing: '-1px' }}>AI Resume Analyzer</h2>
           <Link to="/dashboard" style={linkStyle}>Dashboard</Link>
           <Link to="/analyze" style={linkStyle}>Analyze</Link>
+          <Link to="/qna-dashboard" style={linkStyle}>Q&A Dashboard</Link>
           <Link to="/history" style={linkStyle}>History</Link>
           <Link to="/settings" style={linkStyle}>Settings</Link>
           <Link to="/blog" style={linkStyle}>Blog</Link>

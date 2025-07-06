@@ -45,6 +45,7 @@ const Settings: React.FC = () => {
             <a href="/">Home</a>
             <a href="/dashboard">Dashboard</a>
             <a href="/analyze">Analyze</a>
+            <a href="/qna-dashboard">Q&A Dashboard</a>
             <a href="/history">History</a>
             <a href="/settings">Settings</a>
             <a href="/blog">Blog</a>

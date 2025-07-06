@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { saveQnA } from '../api/resumeApi';
 import { exportQAToPDF, exportQAToDOCX } from './qaExportUtils';
 
 interface InterviewQAGeneratorProps {
@@ -25,14 +26,14 @@ const InterviewQAGenerator: React.FC<InterviewQAGeneratorProps> = ({ resume, jd,
         return;
       }
       if (!(window as any).puter || !(window as any).puter.ai) {
-        setError('Puter.js is not loaded. Please check your internet connection and reload the page.');
+        setError('AI is not loaded. Please check your internet connection and reload the page.');
         setLoading(false);
         return;
       }
       const prompt = `Given the following resume and job description, generate a list of 15 likely interview questions the candidate might be asked, and provide a suggested answer for each. If resume is related to a developer then suggest 10 more technical questions and their best answer as per resume that should be prepared for the interview as per JD separately. Return as a JSON array of objects with 'question' and 'answer' fields.\n\nResume: ${JSON.stringify(resume)}\n\nJob Description: ${jd}`;
-      console.log('DEBUG: Sending prompt to Puter.js', prompt);
+      console.log('DEBUG: Sending prompt to AI', prompt);
       const result = await (window as any).puter.ai.chat(prompt, { model: 'gpt-4o' });
-      console.log('DEBUG: Puter.js result', result);
+      console.log('DEBUG: AI result', result);
       let aiContent = result?.result?.message?.content || result?.message?.content || result;
       let parsed;
       if (typeof aiContent === 'string') {
@@ -54,6 +55,13 @@ const InterviewQAGenerator: React.FC<InterviewQAGeneratorProps> = ({ resume, jd,
         throw new Error('AI response is not a string or array.');
       }
       setQA(parsed);
+      // Save QnA to backend if email is present
+      const emailToSave = resume && resume.email ? resume.email : "default@email.com";
+      try {
+        await saveQnA(emailToSave, parsed);
+      } catch (err) {
+        console.error('DEBUG: Failed to save QnA.', err);
+      }
     } catch (e: any) {
       setError('Failed to generate interview Q&A. ' + (e?.message || ''));
       console.error('DEBUG: Error in handleGenerate', e);
