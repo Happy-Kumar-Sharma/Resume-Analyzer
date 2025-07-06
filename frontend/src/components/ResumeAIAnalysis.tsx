@@ -6,9 +6,10 @@ interface ResumeAIAnalysisProps {
   onAnalysisComplete?: (result: any) => void;
   hideHeading?: boolean;
   onBack?: () => void;
+  onJDChange?: (jd: string) => void;
 }
 
-const ResumeAIAnalysis: React.FC<ResumeAIAnalysisProps> = ({ initialResume, onAnalysisComplete, hideHeading, onBack }) => {
+const ResumeAIAnalysis: React.FC<ResumeAIAnalysisProps> = ({ initialResume, onAnalysisComplete, hideHeading, onBack, onJDChange }) => {
   const [resume, setResume] = useState<any>(initialResume || null);
   const [jd, setJD] = useState('');
   const [result, setResult] = useState<any>(null);
@@ -113,7 +114,10 @@ const ResumeAIAnalysis: React.FC<ResumeAIAnalysisProps> = ({ initialResume, onAn
         <textarea
           placeholder="Paste job description here..."
           value={jd}
-          onChange={e => setJD(e.target.value)}
+          onChange={e => {
+            setJD(e.target.value);
+            if (typeof onJDChange === 'function') onJDChange(e.target.value);
+          }}
           rows={6}
           style={{
             width: '100vw',
@@ -135,8 +139,8 @@ const ResumeAIAnalysis: React.FC<ResumeAIAnalysisProps> = ({ initialResume, onAn
         />
       </label>
       <div style={{ display: 'flex', gap: 16, marginBottom: 12 }}>
-        {/* Back button for step 2, only show if hideHeading is true (i.e., in step 2) */}
-        {hideHeading && (
+        {/* Only show Back button if NOT hideHeading (i.e., not in stepper/flow) */}
+        {!hideHeading && (
           <button className="cta-btn" style={{ background: '#e0d7f7', color: '#232046' }} onClick={onBack}>
             Back
           </button>

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+
 import ResumeUpload from './components/ResumeUpload';
 import ResumeDetails from './components/ResumeDetails';
 import AIEnhanceResume from './components/AIEnhanceResume';
 import ResumeAIAnalysis from './components/ResumeAIAnalysis';
+import InterviewQAGenerator from './components/InterviewQAGenerator';
 import { matchJD, getSuggestions, recommendJobs } from './api/resumeApi';
 import { Link } from 'react-router-dom';
 
@@ -46,14 +48,15 @@ const Hero = () => (
   </section>
 );
 
-const App: React.FC = () => {
 
+const App: React.FC = () => {
   const [step, setStep] = useState(1);
   const [resumeData, setResumeData] = useState<any>(null);
   const [jd, setJd] = useState('');
   const [matchResult, setMatchResult] = useState<any>(null);
   const [suggestions, setSuggestions] = useState<any>(null);
   const [jobs, setJobs] = useState<any[]>([]);
+  const [qaResult, setQaResult] = useState<any[]>([]);
 
 
   const handleResumeParsed = (data: any) => {
@@ -89,6 +92,8 @@ const App: React.FC = () => {
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: resumeData ? '#7f5af0' : '#e0e0e0', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 18, boxShadow: matchResult ? '0 2px 8px #7f5af033' : 'none', transition: 'all 0.2s' }}>2</div>
             <div style={{ width: 40, height: 2, background: matchResult ? '#7f5af0' : '#e0e0e0', transition: 'all 0.2s' }} />
             <div style={{ width: 32, height: 32, borderRadius: '50%', background: matchResult ? '#f5a524' : '#e0e0e0', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 18, boxShadow: jobs.length > 0 ? '0 2px 8px #f5a52433' : 'none', transition: 'all 0.2s' }}>3</div>
+            <div style={{ width: 40, height: 2, background: step === 4 ? '#7f5af0' : '#e0e0e0', transition: 'all 0.2s' }} />
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: step === 4 ? '#7f5af0' : '#e0e0e0', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 18, boxShadow: step === 4 ? '0 2px 8px #7f5af033' : 'none', transition: 'all 0.2s' }}>4</div>
           </div>
         </div>
 
@@ -111,17 +116,16 @@ const App: React.FC = () => {
             <div style={{ width: '100%', marginTop: 24 }}>
               <ResumeAIAnalysis
                 initialResume={resumeData}
-                onAnalysisComplete={(result) => {
-                  setMatchResult(result);
-                  setStep(3);
-                }}
+                onAnalysisComplete={setMatchResult}
                 hideHeading
                 onBack={() => setStep(1)}
+                onJDChange={setJd}
               />
             </div>
-            {/* <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
+            <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
               <button className="cta-btn" style={{ background: '#e0d7f7', color: '#232046' }} onClick={() => setStep(1)}>Back</button>
-            </div> */}
+              <button className="cta-btn" style={{ background: '#7f5af0', color: '#fff' }} onClick={() => setStep(3)} disabled={!matchResult}>Next</button>
+            </div>
           </div>
         )}
 
@@ -158,6 +162,23 @@ const App: React.FC = () => {
             </div>
             <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
               <button className="cta-btn" style={{ background: '#e0d7f7', color: '#232046' }} onClick={() => setStep(2)}>Back</button>
+              <button className="cta-btn" style={{ background: '#7f5af0', color: '#fff' }} onClick={() => setStep(4)}>Next</button>
+              <button className="cta-btn" onClick={() => setStep(1)}>Start Over</button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Interview Q&A Generator */}
+        {step === 4 && resumeData && (matchResult || jd) && (
+          <div style={{ width: '100%' }}>
+            <InterviewQAGenerator
+              resume={resumeData}
+              jd={matchResult?.job_description || jd || ''}
+              qa={qaResult}
+              setQA={setQaResult}
+            />
+            <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
+              <button className="cta-btn" style={{ background: '#e0d7f7', color: '#232046' }} onClick={() => setStep(3)}>Back to Results</button>
               <button className="cta-btn" onClick={() => setStep(1)}>Start Over</button>
             </div>
           </div>
