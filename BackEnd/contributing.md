@@ -58,3 +58,12 @@ npm run dev
 - Make sure the backend is running before using the frontend.
 - Update API URLs in `src/api/resumeApi.ts` if deploying to production.
 - For deployment, see the respective `README.md` files in each folder.
+
+Application can be deployed on Google Colab: https://colab.research.google.com/notebooks/gpu.ipynb#scrollTo=6vtaWxLLzega
+
+To deploy the application on Ngrok Do below configuration
+Here you can get ngrok key: https://dashboard.ngrok.com/get-started/setup/linux
+Run: `ngrok config add-authtoken 2zozL4vkja1QBYW42hENy2A0Tnq_6UpppjJccLJyWyh2Ct6vt`
+Run: `python run_server.py`
+
+https://d3233c38c39d.ngrok-free.app/docs
