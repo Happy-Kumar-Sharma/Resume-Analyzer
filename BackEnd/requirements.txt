@@ -3,9 +3,9 @@ uvicorn
 python-multipart
 PyPDF2
 python-docx
-spacy
-scikit-learn
-sentence-transformers
+# spacy
+# scikit-learn
+# sentence-transformers
 mysql-connector-python
 pydantic
 requests
@@ -13,7 +13,7 @@ mammoth
 easyocr
 pdfminer.six
 numpy
-pillow
+# pillow
 pydantic-settings
 
 httpx

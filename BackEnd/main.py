@@ -82,9 +82,9 @@ async def enhance_resume(data: EnhanceRequest):
         return {"error": str(e)}
 
 # Ensure tables are created on startup
-# @app.on_event("startup")
-# def on_startup():
-#     create_tables()
+@app.on_event("startup")
+def on_startup():
+    create_tables()
 
 # CORS for frontend
 app.add_middleware(
