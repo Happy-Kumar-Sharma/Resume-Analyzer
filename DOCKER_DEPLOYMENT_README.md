@@ -10,64 +10,26 @@ This guide explains how to build, run, and push the Resume-Analyzer application 
 
 From the root of the project, run:
 
-```
-docker build -t <your-dockerhub-username>/resume-analyzer:latest .
-```
+docker compose up --build
 
-Replace `<your-dockerhub-username>` with your Docker Hub username.
+ngrok http 80
 
-## 2. Run the Docker Image
+To push your container images to Docker Hub, follow these steps:
 
-You can pass environment variables at runtime using either method below:
+Log in to Docker Hub (if not already):
+docker login
 
-### Option A: Pass variables directly
+Tag your images for Docker Hub: Replace <your-dockerhub-username> with your Docker Hub username.
 
-```
-docker run -p 80:80 -p 8000:8000 \
-  -e MYSQL_USER=youruser \
-  -e MYSQL_PASSWORD=yourpass \
-  -e MYSQL_HOST=yourhost \
-  -e MYSQL_DB=yourdb \
-  <your-dockerhub-username>/resume-analyzer:latest
-```
+For backend:
+docker tag resume-analyzer-backend thunderhappy/resume-backend:latest
 
-### Option B: Use an env file
+For frontend:
+ docker tag resume-analyzer-frontend thunderhappy/resume-frontend:latest
 
-Create a `.env` file (e.g., in `BackEnd/.env`) with your variables:
+Push the images:
+docker push thunderhappy/resume-backend:latest
+docker push thunderhappy/resume-frontend:latest
 
-```
-MYSQL_USER=youruser
-MYSQL_PASSWORD=yourpass
-MYSQL_HOST=yourhost
-MYSQL_DB=yourdb
-```
+After pushing, your images will be available on Docker Hub for deployment anywhere!
 
-Then run:
-
-```
-docker run -p 80:80 -p 8000:8000 --env-file ./BackEnd/.env <your-dockerhub-username>/resume-analyzer:latest
-```
-
-## 3. Push the Image to Docker Hub
-
-1. Log in to Docker Hub:
-   ```
-   docker login
-   ```
-2. Push the image:
-   ```
-   docker push <your-dockerhub-username>/resume-analyzer:latest
-   ```
-
-## 4. Accessing the Application
-
-- The frontend will be available at `http://<host-ip>/`
-- The backend API will be available at `http://<host-ip>:8000/api/`
-
-## Notes
-- Do **not** commit sensitive `.env` files to version control.
-- For production, always use secure passwords and consider Docker secrets or a secrets manager.
-
----
-
-For any issues, please open an issue or contact the maintainer.

@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 python-multipart
-PyPDF2
+# PyPDF2  # Not used in code
 python-docx
 # spacy
 # scikit-learn
@@ -13,7 +13,9 @@ mammoth
 easyocr
 pdfminer.six
 numpy
-# pillow
+pillow
 pydantic-settings
+nest_asyncio
+pyngrok
 
-httpx
+# httpx  # Not used in code

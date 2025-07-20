@@ -7,9 +7,11 @@ from main import app
 # Allow nested asyncio loops (needed in Colab)
 nest_asyncio.apply()
 
-# Open an ngrok tunnel to the app
-public_url = ngrok.connect(8001)
+import os
+
+ngrok_port = int(os.environ.get("NGROK_PORT", "8000"))
+public_url = ngrok.connect(ngrok_port)
 print(f"🔗 Public URL: {public_url}")
 
 # Run the app
-uvicorn.run(app, host="0.0.0.0", port=8001)
+uvicorn.run(app, host="0.0.0.0", port=ngrok_port)

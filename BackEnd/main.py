@@ -9,7 +9,6 @@ from config import settings
 
 import requests
 from resume_parser import extract_text
-from job_recommender import load_jobs, find_matching_jobs
 import os
 from db import get_db_connection, create_tables
 

@@ -12,6 +12,14 @@ Welcome to the next-generation Resume Analyzer! This beautiful, modern web app l
 - **No Data Leaves Your Browser:** All AI analysis happens locally—your data stays private.
 
 ## 🛠️ Getting Started
+
+### Set env variables
+Create a `.env` file in the `frontend` directory with the following content:
+
+```plaintext
+VITE_API_BASE=http://localhost:8000
+```
+
 1. **Install dependencies:**
    ```bash
    npm install

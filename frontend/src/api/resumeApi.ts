@@ -17,7 +17,10 @@ export const saveResumeData = async (data: any) => {
 };
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000'; // Change to your Render backend URL after deployment
+// const API_BASE = 'http://localhost:8000'; // Change to your Render backend URL after deployment
+
+// Use relative API base URL so frontend and backend work behind same domain (Nginx/ngrok)
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
 
 export const uploadResume = async (file: File) => {
   const formData = new FormData();

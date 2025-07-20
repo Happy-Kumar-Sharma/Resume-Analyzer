@@ -1,0 +1,19 @@
+version: '3'
+services:
+  backend:
+    build: ./BackEnd
+    container_name: resume-backend
+    ports:
+      - "8000:8000"
+    environment:
+      MYSQL_USER: u445193631_RB
+      MYSQL_PASSWORD: Esite198118#
+      MYSQL_HOST: 217.21.87.103
+      MYSQL_DB: u445193631_ResumeBuilder
+  frontend:
+    build: ./frontend
+    container_name: resume-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

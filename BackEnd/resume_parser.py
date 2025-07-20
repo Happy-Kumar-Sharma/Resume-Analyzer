@@ -1,7 +1,3 @@
-
-
-
-import io
 from typing import Optional
 import docx
 from pdfminer.high_level import extract_text as pdfminer_extract_text
@@ -58,6 +54,7 @@ def extract_text_from_image(file) -> str:
         # Convert PIL image to numpy array for EasyOCR
         img_np = np.array(image)
         reader = easyocr.Reader(['en'], gpu=False)
+        # reader = "easyocr.Reader(['en'], gpu=False)"
         result = reader.readtext(img_np, detail=0)
         text = '\n'.join(result)
         return text or ""
