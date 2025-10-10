@@ -1,0 +1,73 @@
+@startuml
+' High-level Resume-Analyzer — vertical layout
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam ranksep 60
+top to bottom direction
+
+actor "End User" as User
+
+rectangle "Client / Browser" as Browser {
+  component "Frontend (React + Vite)" as Frontend
+  component "Puter.js (in-browser AI)" as Puter
+}
+
+node "Deployment / Edge" as Edge {
+  [Nginx Reverse Proxy] as Nginx
+  [Static Host (CDN)] as StaticHost
+}
+
+rectangle "Backend Service (FastAPI)" as Backend {
+  component "Uvicorn / FastAPI\nmain:app" as FastAPI
+  component "Resume Parser\n(PyPDF2, python-docx)" as Parser
+  component "Job Recommender\n(nlp_utils, job_recommender.py)" as Recommender
+  component "API Endpoints\nPOST /parse_resume\nPOST /save_resume_data" as API
+}
+
+database "MySQL (persistent storage)" as MySQL
+folder "Local File Storage / S3 (optional)" as Storage
+file "jobs_mock.json (sample jobs)" as JobsMock
+
+' Vertical flow (top -> bottom)
+User --> Frontend : open app / upload resume / paste JD
+Frontend --> StaticHost : fetch static assets
+StaticHost --> Frontend : serve bundle
+Frontend --> Nginx : POST /parse_resume (file)
+Nginx --> FastAPI : forward request
+FastAPI --> Parser : extract text (PDF/DOCX)
+Parser --> FastAPI : parsed plain text
+FastAPI --> Frontend : return parsed text (JSON)
+Frontend --> Puter : analyze parsed text + JD locally
+Frontend --> Nginx : POST /save_resume_data (structured result)
+Nginx --> FastAPI : forward save request
+FastAPI --> MySQL : persist structured resume
+FastAPI --> Storage : (optional) store file/artifacts
+FastAPI --> Recommender : compute job matches
+Recommender --> FastAPI : recommendations
+FastAPI --> Frontend : saved id / recommendations
+
+' Internal / optional flows
+FastAPI --> JobsMock : read sample jobs (fallback)
+FastAPI --> Storage : offload large files to S3 (optional)
+
+' Deployment hints
+Nginx --> Edge : deployed at edge (reverse proxy / static host)
+FastAPI --> Edge : backend runs behind proxy (container or host)
+MySQL --> Edge : managed DB or container
+
+note top of Frontend
+  In-browser AI (Puter.js)
+  — privacy-first: analysis runs locally
+end note
+
+note bottom of FastAPI
+  Backend responsibilities:
+  - Receive files and extract text
+  - Persist structured data
+  - Provide simple job recommendations
+  (No external AI calls from backend)
+end note
+
+@enduml

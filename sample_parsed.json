@@ -1,0 +1,21 @@
+{
+  "id": "sample-1",
+  "text": "John Doe\nExperience: ...\nSkills: Python, SQL, FastAPI\nEducation: B.Sc Computer Science",
+  "skills": [
+    "Python",
+    "SQL",
+    "FastAPI"
+  ],
+  "entities": {
+    "emails": [
+      "john@example.com"
+    ],
+    "phones": [
+      "+1-555-1234"
+    ]
+  },
+  "recommendations": [
+    "Add metrics to experience",
+    "Highlight SQL projects"
+  ]
+}

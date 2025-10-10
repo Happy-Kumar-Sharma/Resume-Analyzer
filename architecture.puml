@@ -1,0 +1,50 @@
+@startuml
+' Simplified Resume Analyzer — vertical flow
+
+skinparam componentStyle rectangle
+skinparam ranksep 60
+top to bottom direction
+
+actor "End User" as User
+
+rectangle "Browser / Client" as Browser {
+  component "Frontend (React + Vite)" as Frontend
+  component "Puter.js\n(in-browser AI)" as Puter
+}
+
+rectangle "Backend (FastAPI)" as Backend {
+  component "Parse API\nPOST /parse_resume" as ParseAPI
+  component "Save API\nPOST /save_resume_data" as SaveAPI
+}
+
+database "MySQL" as DB
+
+node "Deployment" as Deploy {
+  [Nginx / Reverse Proxy] as Nginx
+}
+
+' Vertical flow (top → bottom)
+User --> Frontend : open app / upload resume / paste JD
+Frontend --> Nginx : POST /parse_resume (file)
+Nginx --> ParseAPI : forward request
+ParseAPI --> ParseAPI : extract text (PyPDF2, python-docx)
+ParseAPI --> Frontend : return parsed text (JSON)
+Frontend --> Puter : analyze parsed text + JD locally
+Frontend --> Nginx : POST /save_resume_data (structured result)
+Nginx --> SaveAPI : forward request
+SaveAPI --> DB : persist structured resume data
+
+note top of Frontend
+  In-browser AI (Puter.js)
+  — privacy-first: analysis runs locally
+end note
+
+note bottom of SaveAPI
+  Backend responsibilities:
+  - Receive files
+  - Extract text
+  - Persist structured data
+  (No external AI calls)
+end note
+
+@enduml

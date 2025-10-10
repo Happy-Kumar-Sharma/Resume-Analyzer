@@ -1,0 +1,35 @@
+@startuml
+title Dataflow for sample-1
+skinparam componentStyle rectangle
+skinparam ranksep 60
+top to bottom direction
+
+actor "User" as User
+component "Frontend (React + Vite)" as Frontend
+component "Parse API (FastAPI)" as Parser
+component "Parsed Text" as ParsedText
+component "Entities" as Entities
+component "Skills" as Skills
+component "Recommendations" as Recs
+database "MySQL" as DB
+component "Puter.js (in-browser AI)" as Puter
+
+User --> Frontend : open app / upload resume
+Frontend --> Parser : file upload (raw bytes)
+Parser --> ParsedText : extracted text (86 chars)
+ParsedText --> Entities : detect emails (1), phones (1)
+ParsedText --> Skills : detected (3)
+ParsedText --> Recs : generate (2)
+ParsedText --> Frontend : return parsed text
+Frontend --> Puter : analyze parsed text + JD (local)
+Frontend --> DB : save structured result (via Save API)
+DB --> Frontend : stored id / confirmation
+
+note top of ParsedText
+  Parsed text is the primary artifact created by the parser.
+end note
+note right of Skills
+  Skills are extracted entities used by the frontend and recommendations.
+end note
+
+@enduml
